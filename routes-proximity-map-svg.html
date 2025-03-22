@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسیرهای نزدیک در قم</title>
+    <style>
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .current-location {
+            background-color: #e9f7fe;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-right: 4px solid #3498db;
+        }
+        .routes-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .route-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+        .route-item:hover {
+            transform: translateX(-5px);
+            background-color: #f9f9f9;
+        }
+        .route-number {
+            background-color: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+        .route-details {
+            flex-grow: 1;
+        }
+        .route-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        .route-distance {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .map-container {
+            height: 400px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+        .street {
+            stroke: #95a5a6;
+            stroke-width: 8;
+        }
+        .current-street {
+            stroke: #3498db;
+            stroke-width: 10;
+        }
+        .label {
+            font-family: Tahoma, Arial, sans-serif;
+            font-size: 12px;
+            text-anchor: middle;
+        }
+        .current-label {
+            font-weight: bold;
+            fill: #3498db;
+        }
+        .point {
+            fill: #e74c3c;
+        }
+        .current-point {
+            fill: #3498db;
+        }
+        .distance-label {
+            font-size: 10px;
+            fill: #7f8c8d;
+        }
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: Tahoma, Arial, sans-serif;
+            margin: 0 5px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>مسیرهای نزدیک در قم</h1>
+        
+        <div class="current-location">
+            <strong>موقعیت فعلی شما:</strong> بلوار محدث قمی، قم
+        </div>
+        
+        <div class="map-container">
+            <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                <!-- خیابان‌ها -->
+                <path d="M100 200 L500 200" class="street" />
+                <path d="M200 100 L200 300" class="street" />
+                <path d="M400 100 L400 300" class="street" />
+                <path d="M150 150 L250 50" class="street" />
+                <path d="M300 150 L350 50" class="street" />
+                
+                <!-- خیابان فعلی -->
+                <path d="M300 200 L450 200" class="current-street" />
+                
+                <!-- نقاط و برچسب‌ها -->
+                <circle cx="350" cy="200" r="8" class="current-point" />
+                <text x="350" y="230" class="label current-label">بلوار محدث قمی (موقعیت فعلی)</text>
+                
+                <circle cx="250" cy="200" r="6" class="point" />
+                <text x="250" y="230" class="label">خیابان تعاون</text>
+                <text x="300" y="185" class="distance-label">1.2 کیلومتر</text>
+                
+                <circle cx="200" cy="150" r="6" class="point" />
+                <text x="170" y="140" class="label">خیابان شهیدان برقعی</text>
+                <text x="240" y="175" class="distance-label">2.5 کیلومتر</text>
+                
+                <circle cx="350" cy="100" r="6" class="point" />
+                <text x="350" y="85" class="label">عطاران، رسالت</text>
+                <text x="330" y="130" class="distance-label">4.8 کیلومتر</text>
+                
+                <circle cx="450" cy="100" r="6" class="point" />
+                <text x="450" y="85" class="label">سی متری هنرستان، بلوار بسیج</text>
+                <text x="425" y="130" class="distance-label">6.3 کیلومتر</text>
+                
+                <!-- راهنما -->
+                <rect x="20" y="320" width="160" height="70" rx="5" fill="#f8f9fa" stroke="#ddd" />
+                <text x="30" y="340" class="label" style="text-anchor: start">راهنما:</text>
+                <line x1="30" y1="355" x2="60" y2="355" class="current-street" />
+                <text x="65" y="358" class="label" style="text-anchor: start; font-size: 10px">مسیر فعلی</text>
+                <line x1="30" y1="375" x2="60" y2="375" class="street" />
+                <text x="65" y="378" class="label" style="text-anchor: start; font-size: 10px">سایر مسیرها</text>
+            </svg>
+        </div>
+        
+        <div class="routes-list" id="routesList">
+            <!-- لیست مسیرها اینجا قرار می‌گیرد -->
+        </div>
+        
+        <div class="actions">
+            <button id="sortBtn">مرتب‌سازی بر اساس فاصله</button>
+            <button id="resetBtn">بازنشانی</button>
+        </div>
+    </div>
+
+    <script>
+        // تعریف مسیرها و فاصله تخمینی (بر اساس اطلاعات محلی)
+        const routes = [
+            { id: 1, name: "خیابان محدث قمی", description: "همان مسیر فعلی شما", distance: 0 },
+            { id: 2, name: "خیابان تعاون", description: "نزدیک به محدث قمی", distance: 1.2 },
+            { id: 3, name: "خیابان شهیدان برقعی", description: "در منطقه مرکزی", distance: 2.5 },
+            { id: 4, name: "عطاران، رسالت", description: "منطقه شمالی قم", distance: 4.8 },
+            { id: 5, name: "سی متری هنرستان، بلوار بسیج", description: "مسیر شرقی شهر", distance: 6.3 }
+        ];
+
+        // نمایش مسیرها به ترتیب نزدیکی
+        function displayRoutes() {
+            const routesListElement = document.getElementById('routesList');
+            routesListElement.innerHTML = '';
+            
+            routes.forEach((route, index) => {
+                const routeElement = document.createElement('div');
+                routeElement.className = 'route-item';
+                routeElement.innerHTML = `
+                    <div class="route-number">${index + 1}</div>
+                    <div class="route-details">
+                        <div class="route-name">${route.name}</div>
+                        <div class="route-description">${route.description}</div>
+                        <div class="route-distance">${route.distance} کیلومتر از موقعیت فعلی</div>
+                    </div>
+                `;
+                routesListElement.appendChild(routeElement);
+            });
+        }
+
+        // مرتب‌سازی مسیرها بر اساس فاصله
+        function sortRoutesByDistance() {
+            routes.sort((a, b) => a.distance - b.distance);
+            displayRoutes();
+        }
+
+        // بازنشانی به ترتیب اصلی
+        function resetRoutes() {
+            routes.sort((a, b) => a.id - b.id);
+            displayRoutes();
+        }
+
+        // اضافه کردن رویدادها به دکمه‌ها
+        document.getElementById('sortBtn').addEventListener('click', sortRoutesByDistance);
+        document.getElementById('resetBtn').addEventListener('click', resetRoutes);
+
+        // نمایش اولیه مسیرها به ترتیب فاصله
+        window.onload = function() {
+            sortRoutesByDistance();
+        };
+    </script>
+</body>
+</html>
